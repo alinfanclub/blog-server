@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { User } from "../model/user.js";
+import { User } from "../model/userModel.js";
 import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";
 import { promisify } from "util";
