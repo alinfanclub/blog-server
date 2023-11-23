@@ -31,9 +31,10 @@ const server = async () => {
 
     app.use("/user", userRoute);
     app.use("/post", postRoute);
+    const PORT = process.env.PORT || 8000;
 
-    app.listen(8000, async () => {
-      console.log(chalk.bgGreen("Server is running on port 8000"));
+    app.listen(PORT, async () => {
+      console.log(chalk.bgGreen(`Server is running on port ${PORT}`));
     });
   } catch (error) {}
 };
