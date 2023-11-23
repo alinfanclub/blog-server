@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Post } from "../Model/Post.js";
+import { Post } from "../model/Post.js";
 import { isLoggedIn } from "./userRoute.js";
 
 const postRoute = Router();
