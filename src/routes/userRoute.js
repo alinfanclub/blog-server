@@ -1,5 +1,4 @@
 import { Router } from "express";
-import mongoose from "mongoose";
 import { User } from "../Model/User.js";
 import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";

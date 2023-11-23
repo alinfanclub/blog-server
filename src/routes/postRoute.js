@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Post } from "../Model/Post.js";
-import { isLoggedIn } from "./UserRoute.js";
+import { isLoggedIn } from "./userRoute.js";
 
 const postRoute = Router();
 
