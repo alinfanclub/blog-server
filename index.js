@@ -2,10 +2,10 @@ import express from "express";
 import { config } from "dotenv";
 import chalk from "chalk";
 import mongoose from "mongoose";
-import userRoute from "./routes/userRouter.js";
+import userRoute from "./src/routes/userRouter.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import postRoute from "./routes/postRouter.js";
+import postRoute from "./src/routes/postRouter.js";
 
 config();
 
