@@ -143,7 +143,6 @@ userRoute.post("/login", async (req, res) => {
 
     res.cookie("jwt", token, {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      httpOnly: false,
     });
 
     return res.status(200).json({

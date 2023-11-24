@@ -15,6 +15,7 @@ postRoute.post("/", isLoggedIn, async (req, res) => {
         .status(400)
         .send({ error: "제목과 내용은 문자열이어야 합니다." });
     }
+
     const post = new Post(req.body);
 
     await post.save();
@@ -33,6 +34,18 @@ postRoute.get("/", async (req, res) => {
     return res.status(200).json({
       status: "success",
       data: posts,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
+postRoute.get("/:id", async (req, res) => {
+  try {
+    const post = await Post.findOne({ title: req.params.id });
+    return res.status(200).json({
+      status: "success",
+      data: post,
     });
   } catch (error) {
     return res.status(500).send({ error: error.message });
