@@ -160,7 +160,7 @@ userRoute.post("/login", async (req, res) => {
   }
 });
 
-userRoute.get("/logout", async (req, res) => {
+userRoute.post("/logout", async (req, res) => {
   try {
     res.clearCookie("jwt");
     return res.status(200).json({
