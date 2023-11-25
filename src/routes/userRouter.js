@@ -90,8 +90,7 @@ export const protect = async (req, res, next) => {
 userRoute.get("/auth", async (req, res) => {
   try {
     let token = req.cookies.jwt;
-    req.cookies.jwt = token;
-    console.log(token);
+    console.log(req.cookies);
     if (!token) {
       return false;
     }
