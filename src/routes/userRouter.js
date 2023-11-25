@@ -143,6 +143,8 @@ userRoute.post("/login", async (req, res) => {
 
     res.cookie("jwt", token, {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      secure: true,
+      domain: "https://port-0-blog-server-5mk12alpaukt9j.sel5.cloudtype.app",
     });
 
     return res.status(200).json({
