@@ -146,7 +146,6 @@ userRoute.post("/login", async (req, res) => {
       sameSite: "Lax",
       httpOnly: true,
       secure: true,
-      path: "/",
     });
 
     return res.status(200).json({
