@@ -7,6 +7,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import postRoute from "./src/routes/postRouter.js";
 import detectPort from "detect-port";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
@@ -30,7 +31,8 @@ const server = async () => {
         credentials: true,
       })
     );
-    app.use(cookieParser());
+    app.use(cookieParser("secret"));
+    app.use(bodyParser.json());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
