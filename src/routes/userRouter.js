@@ -145,6 +145,7 @@ userRoute.post("/login", async (req, res) => {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       sameSite: "none",
       httpOnly: false,
+      secure: true,
     });
 
     return res.status(200).json({
