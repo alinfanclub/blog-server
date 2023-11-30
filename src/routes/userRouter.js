@@ -87,12 +87,12 @@ export const protect = async (req, res, next) => {
   next();
 };
 
-userRoute.get("/auth", async (req, res) => {
+userRoute.get("/auth", async (req, res, next) => {
   try {
     let token = req.cookies.jwt;
     console.log(req.cookies);
     if (!token) {
-      return false;
+      return next();
     }
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     const currentUser = await User.findById(decoded.id);
