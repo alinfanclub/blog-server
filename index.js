@@ -41,10 +41,7 @@ const server = async () => {
     app.use("/admin", function (req, res, next) {
       const jwt = req.cookies.jwt;
       if (!jwt) {
-        return res
-          .status(401)
-          .send({ error: "로그인이 필요합니다." })
-          .redirect("/");
+        return res.redirect("/");
       }
       next();
     });
