@@ -28,6 +28,14 @@ postRoute.post("/", isLoggedIn, async (req, res) => {
   }
 });
 
+postRoute.delete("/:id", isLoggedIn, async (req, res) => {
+  try {
+    await Post.findByIdAndDelete(req.params.id);
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
 postRoute.get("/", async (req, res) => {
   try {
     const posts = await Post.find();
