@@ -36,17 +36,8 @@ const server = async () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    function checkAdminRedirect(req, res, next) {
-      const jwt = req.cookies.jwt;
-      if (!jwt) {
-        history.push("/login");
-      }
-      next();
-    }
-
     app.use("/user", userRoute);
     app.use("/post", postRoute);
-    app.use("/admin", checkAdminRedirect);
 
     app.set("port", process.env.PORT || 3000);
 

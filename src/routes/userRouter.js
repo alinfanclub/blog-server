@@ -87,24 +87,6 @@ export const protect = async (req, res, next) => {
   next();
 };
 
-userRoute.get("/auth", async (req, res) => {
-  try {
-    let token = req.cookies.jwt;
-    console.log(req.cookies);
-    if (!token) {
-      return false;
-    }
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    const currentUser = await User.findById(decoded.id);
-    return res.status(200).json({
-      status: "success",
-      user: currentUser,
-    });
-  } catch (error) {
-    return res.status(500).send({ error: error.message });
-  }
-});
-
 userRoute.post("/signup", async (req, res) => {
   try {
     const { email } = req.body;
@@ -145,7 +127,7 @@ userRoute.post("/login", async (req, res) => {
     res.cookie("jwt", token, {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       sameSite: "None",
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       path: "/",
     });
@@ -162,13 +144,7 @@ userRoute.post("/login", async (req, res) => {
 
 userRoute.post("/logout", async (req, res) => {
   try {
-    res.cookie("jwt", "", {
-      expires: new Date(Date.now() + 10 * 1000),
-      sameSite: "None",
-      httpOnly: true,
-      secure: true,
-      path: "/",
-    });
+    res.clearCookie("jwt");
     return res.status(200).json({
       status: "success",
     });
