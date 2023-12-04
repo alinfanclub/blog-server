@@ -153,4 +153,45 @@ userRoute.post("/logout", async (req, res) => {
   }
 });
 
+userRoute.get("/auth", async (req, res) => {
+  try {
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    } else if (req.cookies.jwt) {
+      token = req.cookies.jwt;
+    }
+
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next(
+        new AppError(
+          "The user belonging to this token does no longer exist.",
+          401
+        )
+      );
+    }
+
+    if (!currentUser)
+      return res.status(200).json({
+        status: "fail",
+      });
+
+    return res.status(200).json({
+      status: "success",
+      data: currentUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      user: null,
+    });
+  }
+});
+
 export default userRoute;
