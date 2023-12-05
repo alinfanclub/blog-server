@@ -6,8 +6,8 @@ const postRoute = Router();
 
 postRoute.post("/", isLoggedIn, async (req, res) => {
   try {
-    const { title, content } = req.body;
-    if (!title || !content) {
+    const { title, content, description } = req.body;
+    if (!title || !content || !description) {
       return res.status(400).send({ error: "제목과 내용을 입력해주세요." });
     }
     if (typeof title !== "string" || typeof content !== "string") {
