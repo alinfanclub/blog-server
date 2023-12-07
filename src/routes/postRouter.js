@@ -69,7 +69,7 @@ postRoute.put("/:id", isLoggedIn, async (req, res) => {
 postRoute.delete("/:id", isLoggedIn, async (req, res) => {
   try {
     await Post.findOneAndDelete({
-      title: req.params.id,
+      _id: req.params.id,
     });
     return res.status(201).json({
       status: "success",
