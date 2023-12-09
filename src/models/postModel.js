@@ -16,6 +16,15 @@ const postSchema = new Schema(
       email: { type: String, required: true },
     },
     tags: [String],
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+    description: {
+      type: String,
+      required: [true, "설명을 입력해주세요."],
+    },
+    thumbnail: String,
   },
   { timestamps: true }
 );

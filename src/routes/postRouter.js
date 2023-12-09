@@ -6,11 +6,15 @@ const postRoute = Router();
 
 postRoute.post("/", isLoggedIn, async (req, res) => {
   try {
-    const { title, content } = req.body;
-    if (!title || !content) {
+    const { title, content, description } = req.body;
+    if (!title || !content || !description) {
       return res.status(400).send({ error: "제목과 내용을 입력해주세요." });
     }
-    if (typeof title !== "string" || typeof content !== "string") {
+    if (
+      typeof title !== "string" ||
+      typeof content !== "string" ||
+      typeof description !== "string"
+    ) {
       return res
         .status(400)
         .send({ error: "제목과 내용은 문자열이어야 합니다." });
@@ -28,9 +32,45 @@ postRoute.post("/", isLoggedIn, async (req, res) => {
   }
 });
 
+postRoute.put("/:id", isLoggedIn, async (req, res) => {
+  try {
+    const { title, content, description } = req.body;
+    if (!title || !content || !description) {
+      return res.status(400).send({ error: "제목과 내용을 입력해주세요." });
+    }
+    if (
+      typeof title !== "string" ||
+      typeof content !== "string" ||
+      typeof description !== "string"
+    ) {
+      return res
+        .status(400)
+        .send({ error: "제목과 내용은 문자열이어야 합니다." });
+    }
+
+    const post = await Post.findOneAndUpdate(
+      {
+        title: req.params.id,
+      },
+      req.body,
+      {
+        new: true,
+      }
+    );
+    return res.status(201).json({
+      status: "success",
+      data: post,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
 postRoute.delete("/:id", isLoggedIn, async (req, res) => {
   try {
-    await Post.findByIdAndDelete(req.params.id);
+    await Post.findOneAndDelete({
+      _id: req.params.id,
+    });
     return res.status(201).json({
       status: "success",
     });
@@ -42,6 +82,18 @@ postRoute.delete("/:id", isLoggedIn, async (req, res) => {
 postRoute.get("/", async (req, res) => {
   try {
     const posts = await Post.find();
+    return res.status(200).json({
+      status: "success",
+      data: posts,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
+postRoute.get("/featured", async (req, res) => {
+  try {
+    const posts = await Post.find({ featured: true });
     return res.status(200).json({
       status: "success",
       data: posts,
