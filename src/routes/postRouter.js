@@ -63,4 +63,15 @@ postRoute.get("/:id", async (req, res) => {
   }
 });
 
+postRoute.get("/tag/:tag", async (req, res) => {
+  try {
+    const posts = await Post.find({ tags: req.params.tag });
+    return res.status(200).json({
+      status: "success",
+      data: posts,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
 export default postRoute;
