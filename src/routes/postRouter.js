@@ -103,6 +103,26 @@ postRoute.get("/featured", async (req, res) => {
   }
 });
 
+postRoute.get("/tag", async (req, res) => {
+  try {
+    const posts = await Post.find();
+    const tagList = [];
+    posts.forEach((post) => {
+      post.tags.forEach((tag) => {
+        if (!tagList.includes(tag)) {
+          tagList.push(tag);
+        }
+      });
+    });
+    return res.status(201).json({
+      status: "success",
+      data: tagList,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
 postRoute.get("/:id", async (req, res) => {
   try {
     const post = await Post.findOne({ title: req.params.id });
@@ -126,4 +146,21 @@ postRoute.get("/tag/:tag", async (req, res) => {
     return res.status(500).send({ error: error.message });
   }
 });
+
+// postRoute.get("/search/:search", async (req, res) => {
+//   try {
+//     const posts = await Post.find({
+//       $text: {
+//         $search: req.params.search,
+//       },
+//     });
+//     return res.status(200).json({
+//       status: "success",
+//       data: posts,
+//     });
+//   } catch (error) {
+//     return res.status(500).send({ error: error.message });
+//   }
+// });
+
 export default postRoute;
