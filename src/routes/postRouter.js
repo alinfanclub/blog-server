@@ -110,7 +110,7 @@ postRoute.get("/page/:page", async (req, res) => {
 
 postRoute.get("/featured", async (req, res) => {
   try {
-    const posts = await Post.find({ featured: true });
+    const posts = await Post.find({ featured: true }).sort({ createdAt: -1 });
     return res.status(200).json({
       status: "success",
       data: posts,
@@ -173,7 +173,9 @@ postRoute.get("/:id", async (req, res) => {
 
 postRoute.get("/tag/:tag", async (req, res) => {
   try {
-    const posts = await Post.find({ tags: req.params.tag });
+    const posts = await Post.find({ tags: req.params.tag }).sort({
+      createdAt: -1,
+    });
     return res.status(200).json({
       status: "success",
       data: posts,
