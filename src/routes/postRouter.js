@@ -91,12 +91,48 @@ postRoute.get("/", async (req, res) => {
   }
 });
 
+// pagenaition 구현
+postRoute.get("/page/:page", async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .skip((req.params.page - 1) * 10)
+      .limit(10);
+    return res.status(200).json({
+      status: "success",
+      data: posts,
+      totalPage: Math.ceil((await Post.countDocuments()) / 10),
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
 postRoute.get("/featured", async (req, res) => {
   try {
     const posts = await Post.find({ featured: true });
     return res.status(200).json({
       status: "success",
       data: posts,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
+// 페이지네이션
+postRoute.get("/featured/page/:page", async (req, res) => {
+  try {
+    const posts = await Post.find({ featured: true })
+      .sort({ createdAt: -1 })
+      .skip((req.params.page - 1) * 10)
+      .limit(10);
+    return res.status(200).json({
+      status: "success",
+      data: posts,
+      totalPage: Math.ceil(
+        (await Post.countDocuments({ featured: true })) / 10
+      ),
     });
   } catch (error) {
     return res.status(500).send({ error: error.message });
@@ -147,20 +183,21 @@ postRoute.get("/tag/:tag", async (req, res) => {
   }
 });
 
-// postRoute.get("/search/:search", async (req, res) => {
-//   try {
-//     const posts = await Post.find({
-//       $text: {
-//         $search: req.params.search,
-//       },
-//     });
-//     return res.status(200).json({
-//       status: "success",
-//       data: posts,
-//     });
-//   } catch (error) {
-//     return res.status(500).send({ error: error.message });
-//   }
-// });
+postRoute.get("/search/:search", async (req, res) => {
+  try {
+    const posts = await Post.find({
+      $or: [
+        { title: { $regex: req.params.search, $options: "i" } },
+        { tags: { $regex: req.params.search, $options: "i" } },
+      ],
+    });
+    return res.status(200).json({
+      status: "success",
+      data: posts,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
 
 export default postRoute;

@@ -6,7 +6,6 @@ import userRoute from "./src/routes/userRouter.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import postRoute from "./src/routes/postRouter.js";
-import detectPort from "detect-port";
 import bodyParser from "body-parser";
 
 dotenv.config();
