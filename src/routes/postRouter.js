@@ -92,46 +92,48 @@ postRoute.get("/", async (req, res) => {
 });
 
 // pagenaition 구현
-postRoute.get("/page/:page", async (req, res) => {
+postRoute.get("/page", async (req, res) => {
+  const perPage = req.query.perPage;
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
-      .skip((req.params.page - 1) * 10)
-      .limit(10);
+      .skip((req.query.page - 1) * perPage)
+      .limit(perPage);
     return res.status(200).json({
       status: "success",
       data: posts,
-      totalPage: Math.ceil((await Post.countDocuments()) / 10),
+      totalPage: Math.ceil((await Post.countDocuments()) / perPage),
     });
   } catch (error) {
     return res.status(500).send({ error: error.message });
   }
 });
 
-postRoute.get("/featured", async (req, res) => {
-  try {
-    const posts = await Post.find({ featured: true }).sort({ createdAt: -1 });
-    return res.status(200).json({
-      status: "success",
-      data: posts,
-    });
-  } catch (error) {
-    return res.status(500).send({ error: error.message });
-  }
-});
+// postRoute.get("/featured", async (req, res) => {
+//   try {
+//     const posts = await Post.find({ featured: true }).sort({ createdAt: -1 });
+//     return res.status(200).json({
+//       status: "success",
+//       data: posts,
+//     });
+//   } catch (error) {
+//     return res.status(500).send({ error: error.message });
+//   }
+// });
 
 // 페이지네이션
-postRoute.get("/featured/page/:page", async (req, res) => {
+postRoute.get("/featured", async (req, res) => {
+  const perPage = req.query.perPage | 5;
   try {
     const posts = await Post.find({ featured: true })
       .sort({ createdAt: -1 })
-      .skip((req.params.page - 1) * 10)
-      .limit(10);
+      .skip((req.query.page - 1) * perPage)
+      .limit(perPage);
     return res.status(200).json({
       status: "success",
       data: posts,
       totalPage: Math.ceil(
-        (await Post.countDocuments({ featured: true })) / 10
+        (await Post.countDocuments({ featured: true })) / perPage
       ),
     });
   } catch (error) {
