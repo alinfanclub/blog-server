@@ -123,7 +123,7 @@ postRoute.get("/page", async (req, res) => {
 
 // 페이지네이션
 postRoute.get("/featured", async (req, res) => {
-  const perPage = req.query.perPage | 5;
+  const perPage = req.query.perPage;
   try {
     const posts = await Post.find({ featured: true })
       .sort({ createdAt: -1 })
