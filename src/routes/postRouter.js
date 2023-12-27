@@ -109,17 +109,17 @@ postRoute.get("/page", async (req, res) => {
   }
 });
 
-// postRoute.get("/featured", async (req, res) => {
-//   try {
-//     const posts = await Post.find({ featured: true }).sort({ createdAt: -1 });
-//     return res.status(200).json({
-//       status: "success",
-//       data: posts,
-//     });
-//   } catch (error) {
-//     return res.status(500).send({ error: error.message });
-//   }
-// });
+postRoute.get("/newest", async (req, res) => {
+  try {
+    const post = await Post.find().sort({ createdAt: -1 });
+    return res.status(200).json({
+      status: "success",
+      data: post[0],
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
 
 // 페이지네이션
 postRoute.get("/featured", async (req, res) => {
