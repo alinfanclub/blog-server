@@ -50,7 +50,7 @@ postRoute.put("/:id", isLoggedIn, async (req, res) => {
 
     const post = await Post.findOneAndUpdate(
       {
-        title: req.params.id,
+        slug: req.params.id,
       },
       req.body,
       {
@@ -163,7 +163,7 @@ postRoute.get("/tag", async (req, res) => {
 
 postRoute.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findOne({ title: req.params.id });
+    const post = await Post.findOne({ slug: req.params.id });
     return res.status(200).json({
       status: "success",
       data: post,
