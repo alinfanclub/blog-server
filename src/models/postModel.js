@@ -28,6 +28,7 @@ const postSchema = new Schema(
     slug: {
       type: String,
       required: [true, "슬러그를 입력해주세요."],
+      unique: true,
     },
   },
   { timestamps: true }
