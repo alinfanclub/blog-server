@@ -25,6 +25,10 @@ const postSchema = new Schema(
       required: [true, "설명을 입력해주세요."],
     },
     thumbnail: String,
+    slug: {
+      type: String,
+      required: [true, "슬러그를 입력해주세요."],
+    },
   },
   { timestamps: true }
 );
