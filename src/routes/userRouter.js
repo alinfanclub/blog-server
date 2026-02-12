@@ -42,6 +42,16 @@ export const isLoggedIn = async (req, res, next) => {
   next();
 };
 
+export const requireAuth = (req, res, next) => {
+  if (!res.locals.user) {
+    return res.status(401).json({
+      status: "fail",
+      message: "로그인이 필요합니다.",
+    });
+  }
+  return next();
+};
+
 userRoute.post("/signup", async (req, res) => {
   try {
     const { email } = req.body;
@@ -62,7 +72,7 @@ userRoute.post("/signup", async (req, res) => {
   }
 });
 
-userRoute.post("/login", async (req, res) => {
+userRoute.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -108,7 +118,7 @@ userRoute.post("/logout", async (req, res) => {
   }
 });
 
-userRoute.get("/auth", async (req, res) => {
+userRoute.get("/auth", async (req, res, next) => {
   try {
     let token;
     if (
@@ -118,6 +128,13 @@ userRoute.get("/auth", async (req, res) => {
       token = req.headers.authorization.split(" ")[1];
     } else if (req.cookies.jwt) {
       token = req.cookies.jwt;
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        status: "fail",
+        message: "로그인이 필요합니다.",
+      });
     }
 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
