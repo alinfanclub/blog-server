@@ -12,15 +12,13 @@ dotenv.config();
 
 const app = express();
 
-const MONGO_URI = `mongodb+srv://e759ksh:${process.env.MONGO_PASSWORD}@cluster0.x86fylx.mongodb.net/?retryWrites=true&w=majority`;
+const MONGO_URI =
+  process.env.MONGO_URI ||
+  `mongodb+srv://e759ksh:${process.env.MONGO_PASSWORD}@cluster0.x86fylx.mongodb.net/?retryWrites=true&w=majority`;
 
 const server = async () => {
   try {
-    try {
-      await mongoose.connect(MONGO_URI);
-    } catch (error) {
-      console.log(chalk.bgRedBright("Failed to connect to MongoDB"));
-    }
+    await mongoose.connect(MONGO_URI);
     mongoose.set("debug", true);
     console.log(chalk.bgRedBright("Connected to MongoDB"));
 
@@ -30,7 +28,7 @@ const server = async () => {
         credentials: true,
       })
     );
-    app.use(cookieParser("secret"));
+    app.use(cookieParser(process.env.COOKIE_SECRET || "secret"));
     app.use(bodyParser.json());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -46,7 +44,9 @@ const server = async () => {
       );
     });
   } catch (error) {
+    console.log(chalk.bgRedBright("Failed to connect to MongoDB"));
     console.log(error);
+    process.exit(1);
   }
 };
 

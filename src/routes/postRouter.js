@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { Post } from "../models/postModel.js";
-import { isLoggedIn } from "./userRouter.js";
+import { isLoggedIn, requireAuth } from "./userRouter.js";
 
 const postRoute = Router();
 
-postRoute.post("/", isLoggedIn, async (req, res) => {
+postRoute.post("/", isLoggedIn, requireAuth, async (req, res) => {
   try {
     const { title, content, description } = req.body;
     if (!title || !content || !description) {
@@ -32,7 +32,7 @@ postRoute.post("/", isLoggedIn, async (req, res) => {
   }
 });
 
-postRoute.put("/:id", isLoggedIn, async (req, res) => {
+postRoute.put("/:id", isLoggedIn, requireAuth, async (req, res) => {
   try {
     const { title, content, description } = req.body;
     if (!title || !content || !description) {
@@ -66,10 +66,10 @@ postRoute.put("/:id", isLoggedIn, async (req, res) => {
   }
 });
 
-postRoute.delete("/:id", isLoggedIn, async (req, res) => {
+postRoute.delete("/:id", isLoggedIn, requireAuth, async (req, res) => {
   try {
     await Post.findOneAndDelete({
-      _id: req.params.id,
+      slug: req.params.id,
     });
     return res.status(201).json({
       status: "success",
@@ -161,18 +161,6 @@ postRoute.get("/tag", async (req, res) => {
   }
 });
 
-postRoute.get("/:id", async (req, res) => {
-  try {
-    const post = await Post.findOne({ slug: req.params.id });
-    return res.status(200).json({
-      status: "success",
-      data: post,
-    });
-  } catch (error) {
-    return res.status(500).send({ error: error.message });
-  }
-});
-
 postRoute.get("/tag/:tag", async (req, res) => {
   try {
     const posts = await Post.find({ tags: req.params.tag }).sort({
@@ -204,4 +192,17 @@ postRoute.get("/search/:search", async (req, res) => {
   }
 });
 
+postRoute.get("/:id", async (req, res) => {
+  try {
+    const post = await Post.findOne({ slug: req.params.id });
+    return res.status(200).json({
+      status: "success",
+      data: post,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
+});
+
 export default postRoute;
+
